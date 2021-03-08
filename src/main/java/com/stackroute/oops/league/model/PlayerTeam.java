@@ -7,26 +7,38 @@ import java.io.Serializable;
  * This is a subclass of Serializable and Comparable interface
  */
 public class PlayerTeam implements Serializable, Comparable {
-
+     private String playerId;
+     private String teamTitle;
+     private String season;
+     private double experience;
     //Parameterized Constructor to initialize all properties
-    public PlayerTeam(String playerId, String teamTitle) {
+    public PlayerTeam(String playerId, String teamTitle,String season,double experience) {
+        this.playerId=playerId;
+        this.teamTitle=teamTitle;
+        this.season=season;
+        this.experience=experience;
     }
 
     public String getPlayerId() {
-        return null;
+        return playerId;
     }
 
     public String getTeamTitle() {
-        return null;
+        return this.teamTitle;
     }
-
+  public String getSeason(){
+    return season;
+ }
+ public double getExperience() {
+    return experience;
+ }
     /**
      * This overridden method should return player details in below format
      * Player{playerId=xxxxx, teamTitle=xxxxxx}
      */
     @Override
     public String toString() {
-        return null;
+        return "playerId="+ playerId+","+"teamTitle="+ teamTitle;
     }
 
     //Overridden compare method based on playerId

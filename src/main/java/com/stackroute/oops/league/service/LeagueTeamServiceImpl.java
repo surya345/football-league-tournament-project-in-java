@@ -20,7 +20,7 @@ public class LeagueTeamServiceImpl implements LeagueTeamService {
      * empty ArrayList for registeredPlayerList and empty TreeSet for playerTeamSet
      */
     public LeagueTeamServiceImpl() {
-
+     
     }
 
     //Add player data to file using PlayerDao object

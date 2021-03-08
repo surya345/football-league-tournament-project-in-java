@@ -4,6 +4,7 @@ import com.stackroute.oops.league.exception.PlayerAlreadyExistsException;
 import com.stackroute.oops.league.exception.PlayerNotFoundException;
 import com.stackroute.oops.league.model.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,8 +18,8 @@ public class PlayerDaoImpl implements PlayerDao {
     /**
      * Constructor to initialize an empty ArrayList for playerList
      */
-    public PlayerDaoImpl() {
-
+    public PlayerDaoImpl( ) {
+      ArrayList<Player> playerList=new ArrayList<>();
     }
 
     /**
@@ -27,13 +28,27 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public boolean addPlayer(Player player) throws PlayerAlreadyExistsException {
+        
+        if(player.equals(PLAYER_FILE_NAME)){
+            return true;
+        }
+        if(player.getPassword().length() >=6 ){
+          return true;
+        }
+        if(player.getYearExpr() >= 4 ){
+            return true;
+        }
         return false;
     }
 
-    //Return the list of player objects by reading data from the file "player.csv"
+  
+
+    // Return the list of player objects by reading data from the file "player.csv"
     @Override
     public List<Player> getAllPlayers() {
-        return null;
+       if( player != PLAYER_FILE_NAME ){
+        return playerList;}
+       
     }
 
     /**
@@ -41,7 +56,10 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public Player findPlayer(String playerId) throws PlayerNotFoundException {
+       if(playerId != PLAYER_FILE_NAME){
         return null;
+       }
+       return null;
 
     }
 }
