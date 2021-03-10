@@ -6,7 +6,8 @@ package com.stackroute.oops.league.service;
  * Modify this code by adding description to each enum constants
  */
 public enum LeagueTeamTitles {
-    HIPHOP(), WIN2WIN(),
-    HAPPYFEET, LUCKYSTRIKE;
-  
+    
+    HIPHOP( enumValue:"Hiphop"), WIN2WIN(enumValue:"Win2Win"),
+    HAPPYFEET(enumValue:"Happy Feet"), LUCKYSTRIKE(enumValue:"Lucky Strike");
+    public String enumValue;
 }

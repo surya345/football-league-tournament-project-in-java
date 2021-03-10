@@ -4,6 +4,13 @@ import com.stackroute.oops.league.exception.PlayerAlreadyExistsException;
 import com.stackroute.oops.league.exception.PlayerNotFoundException;
 import com.stackroute.oops.league.model.Player;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +26,7 @@ public class PlayerDaoImpl implements PlayerDao {
      * Constructor to initialize an empty ArrayList for playerList
      */
     public PlayerDaoImpl( ) {
-      ArrayList<Player> playerList=new ArrayList<>();
+       playerList=new ArrayList<>();
     }
 
     /**
@@ -28,16 +35,42 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public boolean addPlayer(Player player) throws PlayerAlreadyExistsException {
-        
-        if(player.equals(PLAYER_FILE_NAME)){
-            return true;
+        try {
+            boolean isAlreadyExists=false;
+            FileReader reader=new FileReader(PLAYER_FILE_NAME);
+            BufferedReader bufferedReader =new BufferedReader(reader);
+            FileWriter writer=new FileWriter(PLAYER_FILE_NAME);
+            BufferedWriter bufferedWriter =new BufferedWriter(writer);
+            String temp;
+            String playerdata[];
+            while((temp=bufferedReader.readLine())!=null){
+           playerdata =temp.split(",");
+           if(playerdata[0].equals(player.getId())){
+               isAlreadyExists=true;
+               break;
+           }
+           if(isAlreadyExists=!true){
+              if(player.getPassword().length() <=6 ||player.getYearExpr() <= 0){
+                  return false;
+              }
+              String PlayerDetails=player.getId()+ " , " + player.getName() +" , " +player.getPassword() +" , " + player.getYearExpr() +" , "+ player.getTeamTitle();
+              writer.append(PlayerDetails+"\n");
+           }
+            }
+        } catch (Exception e) {
+            
+            e.printStackTrace();
         }
-        if(player.getPassword().length() >=6 ){
-          return true;
-        }
-        if(player.getYearExpr() >= 4 ){
-            return true;
-        }
+    
+        // if(player.equals(PLAYER_FILE_NAME)){
+        //     return true;
+        // }
+        // if(player.getPassword().length() >=6 ){
+        //   return true;
+        // }
+        // if(player.getYearExpr() >= 4 ){
+        //     return true;
+        // }
         return false;
     }
 
@@ -46,8 +79,27 @@ public class PlayerDaoImpl implements PlayerDao {
     // Return the list of player objects by reading data from the file "player.csv"
     @Override
     public List<Player> getAllPlayers() {
-       if( player != PLAYER_FILE_NAME ){
-        return playerList;}
+    
+   
+    try { 
+        String playerData[];
+        Player player;
+        String temp;
+        FileReader reader=new FileReader(PLAYER_FILE_NAME);
+        BufferedReader bufferedReader =new BufferedReader(reader);
+        while(((temp =bufferedReader.readLine())!=null)){
+        playerData=temp.split(",");
+        player=new Player(playerData[0], playerData[1],playerData[2], Integer.parseInt(playerData[3]));
+        player.setTeamTitle(playerData[4]);
+        playerList.add(player);
+   
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        
+    }
+
+    return playerList;
        
     }
 
@@ -56,9 +108,26 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public Player findPlayer(String playerId) throws PlayerNotFoundException {
-       if(playerId != PLAYER_FILE_NAME){
-        return null;
-       }
+        
+        try {
+            String playerData[];
+            Player player;
+            String temp;
+            FileReader  reader = new FileReader(PLAYER_FILE_NAME);
+            BufferedReader bufferedReader =new BufferedReader(reader);
+            while(((temp = bufferedReader.readLine())!=null)){
+            playerData=temp.split(",");
+            player=new Player(playerData[0], playerData[1],playerData[2], Integer.parseInt(playerData[3]));
+            if(playerId != playerData[0]){
+            
+            }
+            }
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        }
+       
+  
        return null;
 
     }
