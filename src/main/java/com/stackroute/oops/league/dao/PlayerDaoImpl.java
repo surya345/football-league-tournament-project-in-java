@@ -109,10 +109,10 @@ public class PlayerDaoImpl implements PlayerDao {
             throw new PlayerNotFoundException("Player Not found");
         }
         boolean isFound=false;
-        Player player=null;
+       
         try {
             String playerData[];
-           
+            Player player=null;
             
             String temp;
             FileReader  reader = new FileReader(PLAYER_FILE_NAME);
