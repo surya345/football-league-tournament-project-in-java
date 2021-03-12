@@ -20,6 +20,8 @@ import java.util.List;
  * This class has one field playerList and a String constant for storing file name
  */
 public class PlayerDaoImpl implements PlayerDao {
+
+    
     private static final String PLAYER_FILE_NAME = "src/main/resources/player.csv";
     private List<Player> playerList;
 
@@ -51,22 +53,23 @@ public class PlayerDaoImpl implements PlayerDao {
           }
           if(player.getPassword().length() >6 && player.getYearExpr() >0){
               try{
-            FileWriter writer=new FileWriter(PLAYER_FILE_NAME);
-            writer.append(player.getPlayerId()+", " +player.getPassword()+", "+player.getPlayerName()+", "+player.getYearExpr()+", "+player.getTeamTitle());
-            writer.flush();
-            writer.close();
+            FileWriter write=new FileWriter(PLAYER_FILE_NAME,true);
+            write.write(player.getPlayerId()+", " +player.getPassword()+", "+player.getPlayerName()+", "+player.getYearExpr()+", "+player.getTeamTitle());
+            write.append("\n");
+            write.flush();
+            write.close();
 
             isAlreadyExists=true;}
            catch(IOException e){
             e.printStackTrace();
            }
            
-            return isAlreadyExists;
+           
            
                
            }
             
-        return false;
+           return isAlreadyExists;
     }
 
   
@@ -84,8 +87,8 @@ public class PlayerDaoImpl implements PlayerDao {
         String temp;
         FileReader reader =new FileReader(PLAYER_FILE_NAME);
         BufferedReader bufferedReader =new BufferedReader(reader);
-        while(((temp =bufferedReader.readLine())!=null)){
-        playerData=temp.split(",");
+        while((temp =bufferedReader.readLine())!=null){
+        playerData=temp.split(", ");
         player=new Player(playerData[0], playerData[1],playerData[2], Integer.parseInt(playerData[3]));
         player.setTeamTitle(playerData[4]);
         playerList.add(player);
@@ -105,21 +108,33 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public Player findPlayer(String playerId) throws PlayerNotFoundException {
+        // List<Player> players = getAllPlayers();
+        // int flag=0;
+        // for (Player p: players) {
+        //     if (p.getPlayerId().equals(playerId)){
+        //         flag=1;
+        //         return p;
+        //     }
+        // }
+        // if (flag!=1){
+        //     throw new PlayerNotFoundException("player not found");
+        // }
+        // return null;
         if(playerId ==""|| playerId==null||playerId==" "){
             throw new PlayerNotFoundException("Player Not found");
         }
         boolean isFound=false;
-       
+        Player player=null;
         try {
             String playerData[];
-            Player player=null;
+            
             
             String temp;
             FileReader  reader = new FileReader(PLAYER_FILE_NAME);
             BufferedReader bufferedReader =new BufferedReader(reader);
             while(((temp = bufferedReader.readLine())!=null)){
             // throw new PlayerNotFoundException("Player not found");
-            playerData=temp.split(",");
+            playerData=temp.split(", ");
            
             if(playerId .equals(playerData[0]) ){
             player=new Player(playerData[0], playerData[1],playerData[2], Integer.parseInt(playerData[3]));
@@ -138,6 +153,9 @@ public class PlayerDaoImpl implements PlayerDao {
        
        if(isFound)
        return player;
+
+       return null; 
     }
-    
+   
 }
+
