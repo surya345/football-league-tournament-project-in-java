@@ -7,6 +7,7 @@ import com.stackroute.oops.league.model.PlayerTeam;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -18,13 +19,14 @@ import java.util.TreeSet;
  */
 public class PlayerTeamDaoImpl implements PlayerTeamDao {
     private static final String TEAM_FILE_NAME = "src/main/resources/finalteam.csv";
-    
+    Set<PlayerTeam> playerTeamSet;
+    PlayerDao playerDao;
     /**
      * Constructor to initialize an empty TreeSet and PlayerDao object
      */
-    public PlayerTeamDaoImpl(String playerDao) {
-         
-        TreeSet<PlayerDao> ts = new TreeSet<>();
+    public PlayerTeamDaoImpl( ) {
+        this.playerDao=new PlayerDaoImpl();
+         playerTeamSet = new TreeSet<>();
         
     }
 
@@ -43,11 +45,11 @@ public class PlayerTeamDaoImpl implements PlayerTeamDao {
             String temp;
             while(((temp = bufferedreader.readLine())!=null)){
             playerData =temp.split(",");
-            playerTeam =new PlayerTeam(playerData[0], playerData[1], playerData[2], Integer.parseInt(playerData[3]));
-            // playerTeam.setTeamTitle(playerData[4]);
-            if(){
-
+            if( playerData[1] .equals(teamTitle) ){
+                playerTeam =new PlayerTeam(playerData[0], playerData[1]);
+                playerTeamSet.add(playerTeam);
             }
+            
             }
         } catch (Exception e) {
           
@@ -59,27 +61,20 @@ public class PlayerTeamDaoImpl implements PlayerTeamDao {
     //Add the given PlayerTeam Object to finalteam.csv file
     @Override
     public boolean addPlayerToTeam(Player player) throws PlayerNotFoundException {
-          
-           
+          Player findPlayer=playerDao.findPlayer(player.getPlayerId());
+             boolean flag=false;
             try {
-                PlayerTeam playerTeam;
-                FileReader reader = new FileReader(TEAM_FILE_NAME);
-                BufferedReader bufferedreader =new BufferedReader(reader);
-                String playerData[];
-                String temp;
-                while(((temp = bufferedreader.readLine())!=null)){
-                    playerData=temp.split(",");
-                    playerTeam =new PlayerTeam(playerData[0], playerData[1], playerData[2], Integer.parseInt(playerData[3]));
-                    PlayerDao.add(playerTeam);
-                }
-               
+                FileWriter writer = new FileWriter(TEAM_FILE_NAME);
+                writer.append(findPlayer.getPlayerId()+","+findPlayer.getTeamTitle()+ "\n");   
+                writer.close();
+               flag=true;
             } catch (Exception e) {
                
                 e.printStackTrace();
             }
            
         
-        return false;
+        return flag;
     }
 
     //Return the set of all PlayerTeam by reading the file content from finalteam.csv file
@@ -87,6 +82,7 @@ public class PlayerTeamDaoImpl implements PlayerTeamDao {
     public Set<PlayerTeam> getAllPlayerTeams() {
         
         try {
+            
             FileReader reader = new FileReader(TEAM_FILE_NAME);
             BufferedReader bufferedReader =new BufferedReader(reader);
             String temp;
@@ -94,6 +90,9 @@ public class PlayerTeamDaoImpl implements PlayerTeamDao {
             try {
                 while((temp=bufferedReader.readLine())!=null){
                 playerdata = temp.split(",");
+                PlayerTeam playerTeam =new PlayerTeam(playerdata[0], playerdata[1]);
+                playerTeamSet.add(playerTeam);
+                 return playerTeamSet;
                 }
             } catch (IOException e) {
                 

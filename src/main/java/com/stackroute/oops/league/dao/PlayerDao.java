@@ -1,5 +1,6 @@
 package com.stackroute.oops.league.dao;
 
+import com.stackroute.oops.league.exception.PlayerAlreadyAllottedException;
 import com.stackroute.oops.league.exception.PlayerAlreadyExistsException;
 import com.stackroute.oops.league.exception.PlayerNotFoundException;
 import com.stackroute.oops.league.model.Player;
@@ -10,7 +11,7 @@ public interface PlayerDao {
 
     boolean addPlayer(Player player) throws PlayerAlreadyExistsException;
 
-    List<Player> getAllPlayers();
+    List<Player> getAllPlayers() throws PlayerAlreadyAllottedException;
 
     Player findPlayer(String playerId) throws PlayerNotFoundException;
 

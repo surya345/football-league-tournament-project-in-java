@@ -1,5 +1,6 @@
 package com.stackroute.oops.league.dao;
 
+import com.stackroute.oops.league.exception.PlayerAlreadyAllottedException;
 import com.stackroute.oops.league.exception.PlayerAlreadyExistsException;
 import com.stackroute.oops.league.exception.PlayerNotFoundException;
 import com.stackroute.oops.league.model.Player;
@@ -35,42 +36,36 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public boolean addPlayer(Player player) throws PlayerAlreadyExistsException {
+        Player player1=null;
+        boolean isAlreadyExists=true;
         try {
-            boolean isAlreadyExists=false;
-            FileReader reader=new FileReader(PLAYER_FILE_NAME);
-            BufferedReader bufferedReader =new BufferedReader(reader);
-            FileWriter writer=new FileWriter(PLAYER_FILE_NAME);
-            BufferedWriter bufferedWriter =new BufferedWriter(writer);
-            String temp;
-            String playerdata[];
-            while((temp=bufferedReader.readLine())!=null){
-           playerdata =temp.split(",");
-           if(playerdata[0].equals(player.getId())){
-               isAlreadyExists=true;
-               break;
-           }
-           if(isAlreadyExists=!true){
-              if(player.getPassword().length() <=6 ||player.getYearExpr() <= 0){
-                  return false;
-              }
-              String PlayerDetails=player.getId()+ " , " + player.getName() +" , " +player.getPassword() +" , " + player.getYearExpr() +" , "+ player.getTeamTitle();
-              writer.append(PlayerDetails+"\n");
-           }
-            }
-        } catch (Exception e) {
+         player1= findPlayer(player.getPlayerId());
+            
+        }
+        catch (PlayerNotFoundException e) {
             
             e.printStackTrace();
         }
-    
-        // if(player.equals(PLAYER_FILE_NAME)){
-        //     return true;
-        // }
-        // if(player.getPassword().length() >=6 ){
-        //   return true;
-        // }
-        // if(player.getYearExpr() >= 4 ){
-        //     return true;
-        // }
+          if(player1!=null){
+              throw new PlayerAlreadyExistsException("Player Already Exists");
+          }
+          if(player.getPassword().length() >6 && player.getYearExpr() >0){
+              try{
+            FileWriter writer=new FileWriter(PLAYER_FILE_NAME);
+            writer.append(player.getPlayerId()+", " +player.getPassword()+", "+player.getPlayerName()+", "+player.getYearExpr()+", "+player.getTeamTitle());
+            writer.flush();
+            writer.close();
+
+            isAlreadyExists=true;}
+           catch(IOException e){
+            e.printStackTrace();
+           }
+           
+            return isAlreadyExists;
+           
+               
+           }
+            
         return false;
     }
 
@@ -78,23 +73,25 @@ public class PlayerDaoImpl implements PlayerDao {
 
     // Return the list of player objects by reading data from the file "player.csv"
     @Override
-    public List<Player> getAllPlayers() {
-    
-   
+    public List<Player> getAllPlayers()  {
+    // Player player2;
+    // //  if(player2!=null){
+    // //      throw new PlayerAlreadyAllottedException("Player Already Alloted");
+    // //  }
     try { 
         String playerData[];
         Player player;
         String temp;
-        FileReader reader=new FileReader(PLAYER_FILE_NAME);
+        FileReader reader =new FileReader(PLAYER_FILE_NAME);
         BufferedReader bufferedReader =new BufferedReader(reader);
         while(((temp =bufferedReader.readLine())!=null)){
         playerData=temp.split(",");
         player=new Player(playerData[0], playerData[1],playerData[2], Integer.parseInt(playerData[3]));
         player.setTeamTitle(playerData[4]);
         playerList.add(player);
-   
+        
         }
-    } catch (IOException e) {
+    } catch (Exception e) {
         e.printStackTrace();
         
     }
@@ -108,27 +105,39 @@ public class PlayerDaoImpl implements PlayerDao {
      */
     @Override
     public Player findPlayer(String playerId) throws PlayerNotFoundException {
-        
+        if(playerId ==""|| playerId==null||playerId==" "){
+            throw new PlayerNotFoundException("Player Not found");
+        }
+        boolean isFound=false;
+        Player player=null;
         try {
             String playerData[];
-            Player player;
+           
+            
             String temp;
             FileReader  reader = new FileReader(PLAYER_FILE_NAME);
             BufferedReader bufferedReader =new BufferedReader(reader);
             while(((temp = bufferedReader.readLine())!=null)){
+            // throw new PlayerNotFoundException("Player not found");
             playerData=temp.split(",");
+           
+            if(playerId .equals(playerData[0]) ){
             player=new Player(playerData[0], playerData[1],playerData[2], Integer.parseInt(playerData[3]));
-            if(playerId != playerData[0]){
-            
+
+            player.setTeamTitle(playerData[4]);
+            isFound=true;
+            return player;
             }
             }
         } catch (Exception e) {
             
             e.printStackTrace();
         }
+      if(!isFound)
+       throw new PlayerNotFoundException("Player Not Found");
        
-  
-       return null;
-
+       if(isFound)
+       return player;
     }
+    
 }
