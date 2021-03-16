@@ -44,7 +44,7 @@ public class PlayerTeamDaoImpl implements PlayerTeamDao {
             String playerData[];
             String temp;
             while(((temp = bufferedreader.readLine())!=null)){
-            playerData =temp.split(",");
+            playerData =temp.split(", ");
             if( playerData[1] .equals(teamTitle) ){
                 playerTeam =new PlayerTeam(playerData[0], playerData[1]);
                 playerTeamSet.add(playerTeam);
@@ -89,7 +89,7 @@ public class PlayerTeamDaoImpl implements PlayerTeamDao {
             String playerdata[];
             try {
                 while((temp=bufferedReader.readLine())!=null){
-                playerdata = temp.split(",");
+                playerdata = temp.split(", ");
                 PlayerTeam playerTeam =new PlayerTeam(playerdata[0], playerdata[1]);
                 playerTeamSet.add(playerTeam);
                  return playerTeamSet;

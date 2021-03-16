@@ -10,9 +10,19 @@ public enum LeagueTeamTitles {
     HIPHOP("Hiphop"), WIN2WIN("Win2Win"), HAPPYFEET("Happy Feet"), LUCKYSTRIKE("Lucky Strike");
 
     public final String temp;
-
+   String value;
     LeagueTeamTitles(String temp) {
         this.temp = temp;
     }
 
+    public String getValue() {
+        return value;
+    }
+ public void setValue(String value){
+     this.value =value;
+ }
+    @Override
+    public String toString(){
+        return this.getValue();
+    }
 }

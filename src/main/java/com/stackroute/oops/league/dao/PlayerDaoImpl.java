@@ -77,10 +77,7 @@ public class PlayerDaoImpl implements PlayerDao {
     // Return the list of player objects by reading data from the file "player.csv"
     @Override
     public List<Player> getAllPlayers()  {
-    // Player player2;
-    // //  if(player2!=null){
-    // //      throw new PlayerAlreadyAllottedException("Player Already Alloted");
-    // //  }
+    
     try { 
         String playerData[];
         Player player;
@@ -133,7 +130,7 @@ public class PlayerDaoImpl implements PlayerDao {
             FileReader  reader = new FileReader(PLAYER_FILE_NAME);
             BufferedReader bufferedReader =new BufferedReader(reader);
             while(((temp = bufferedReader.readLine())!=null)){
-            // throw new PlayerNotFoundException("Player not found");
+            
             playerData=temp.split(", ");
            
             if(playerId .equals(playerData[0]) ){
