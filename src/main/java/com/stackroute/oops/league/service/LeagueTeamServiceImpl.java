@@ -118,7 +118,7 @@ PlayerTeamDao playerTeamDao;
                  for(Player player:playerList){
                      if(player.getTeamTitle()==null)
                          continue;
-                     if(player.getTeamTitle().equalsIgnoreCase(teamTitle.getValue())){
+                     if(player.getTeamTitle().equalsIgnoreCase(teamTitle.label)){
                        flag++;
                      }
                  }

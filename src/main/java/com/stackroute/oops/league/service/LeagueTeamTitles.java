@@ -9,20 +9,12 @@ package com.stackroute.oops.league.service;
 public enum LeagueTeamTitles {
     HIPHOP("Hiphop"), WIN2WIN("Win2Win"), HAPPYFEET("Happy Feet"), LUCKYSTRIKE("Lucky Strike");
 
-    public final String temp;
+    public final String label;
    String value;
-    LeagueTeamTitles(String temp) {
-        this.temp = temp;
+    LeagueTeamTitles(String label) {
+        this.label = label;
     }
 
-    public String getValue() {
-        return value;
-    }
- public void setValue(String value){
-     this.value =value;
- }
-    @Override
-    public String toString(){
-        return this.getValue();
-    }
+   
+   
 }
